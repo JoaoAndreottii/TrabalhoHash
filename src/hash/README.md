@@ -21,7 +21,6 @@ O objetivo central é avaliar quantitativamente cada abordagem considerando: tem
 └── HashTable.java               # Interface comum (contrato para todas as tabelas)
 
 📄 metricas.csv                  # Arquivo de saída com todas as métricas coletadas
-📄 README.md                     # Este arquivo
 
 🚀 Configuração e Execução
 Pré-requisitos
