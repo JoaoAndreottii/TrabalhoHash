@@ -1,106 +1,168 @@
-Trabalho de Tabelas Hash em Java
+Tabela Hash em Java – Análise Comparativa de Desempenho
+📋 Descrição do Projeto
+Este projeto implementa e compara o desempenho de três estratégias de resolução de colisões em tabelas hash, desenvolvido como parte da avaliação da disciplina. As implementações incluem:
 
-Descrição do Projeto:
+Hash Linear (Linear Probing) – Resolução de colisões através de sondagem linear
+Hash Duplo (Double Hashing) – Uso de função de hash secundária para cálculo do incremento
+Hash com Encadeamento (Chaining) – Tratamento de colisões mediante listas encadeadas
 
-Este projeto implementa e analisa o desempenho de diferentes tabelas hash em Java, conforme os requisitos do trabalho da disciplina. Foram implementadas três abordagens principais:
+O objetivo central é avaliar quantitativamente cada abordagem considerando: tempo de inserção, tempo de busca, número de colisões e qualidade da distribuição dos elementos.
 
-Hash Linear (Linear Probing) – Função de rehashing linear.
+🗂️ Estrutura do Projeto
+📁 hash/
+├── Main.java                    # Ponto de entrada e orquestração dos testes
+├── Registro.java                # Modelo de dados (objeto de registro)
+├── HashTableLinear.java         # Implementação: Linear Probing
+├── HashTableDuplo.java          # Implementação: Double Hashing
+├── HashTableEncadeamento.java   # Implementação: Chaining
+├── ListaEncadeada.java          # Estrutura auxiliar para encadeamento
+└── HashTable.java               # Interface comum (contrato para todas as tabelas)
 
-Hash Duplo (Double Hashing) – Função de rehashing duplo.
+📄 metricas.csv                  # Arquivo de saída com todas as métricas coletadas
+📄 README.md                     # Este arquivo
 
-Hash com Encadeamento (Chaining) – Uso de listas encadeadas para tratamento de colisões.
+🚀 Configuração e Execução
+Pré-requisitos
 
-O objetivo é medir o desempenho de cada abordagem em termos de tempo de inserção, tempo de busca, número de colisões e distribuição de elementos.
+Java JDK 8 ou superior instalado
+Terminal ou prompt de comando configurado com javac e java no PATH
 
-Estrutura do Projeto
+Passo a passo
 
-hash/ – Pacote contendo todas as classes Java:
+Compilar o projeto:
 
-Main.java – Classe principal que executa os testes.
+bashjavac hash/*.java
 
-Registro.java – Classe que representa o objeto de registro.
+Executar os testes:
 
-HashTableLinear.java – Implementação de tabela hash com rehashing linear.
+bashjava hash.Main
+```
 
-HashTableDuplo.java – Implementação de tabela hash com rehashing duplo.
+### O que o programa faz?
 
-HashTableEncadeamento.java – Implementação de tabela hash com encadeamento.
+Ao executar, o programa realiza automaticamente:
 
-ListaEncadeada.java – Estrutura auxiliar para o encadeamento.
+1. Geração de três conjuntos de dados com seeds fixas:
+   - 100.000 registros
+   - 1.000.000 registros
+   - 10.000.000 registros
 
-HashTable.java – Interface comum para todas as tabelas hash.
+2. Inserção dos dados nas três implementações de tabela hash
 
-metricas.csv – Arquivo gerado pelo programa contendo todas as métricas coletadas durante a execução dos testes.
+3. Execução de buscas e coleta de métricas de desempenho
 
-Configuração e Execução
+4. Exportação dos resultados para o arquivo `metricas.csv`
 
-Compilar todas as classes Java:
+---
 
-javac hash/*.java
+## ⚙️ Decisões de Implementação
+
+### Dimensionamento das Tabelas
+
+| Registros     | Tamanho da Tabela | Fator de Carga (aprox.) |
+|---------------|-------------------|-------------------------|
+| 100.000       | 150.000          | 66%                     |
+| 1.000.000     | 1.500.000        | 66%                     |
+| 10.000.000    | 15.000.000       | 66%                     |
+
+Os tamanhos foram escolhidos para manter um fator de carga consistente e permitir análise comparativa justa entre os métodos.
+
+### Funções Hash Implementadas
+
+#### Linear Probing
+```
+hash(k) = k mod tamanho
+rehash(i) = (hash + i) mod tamanho
+```
+
+#### Double Hashing
+```
+hash1(k) = k mod tamanho
+hash2(k) = 1 + (k / tamanho) mod (tamanho - 1)
+rehash(i) = (hash1 + i × hash2) mod tamanho
+```
+
+#### Chaining
+```
+hash(k) = k mod tamanho
+→ Armazena em lista encadeada na posição hash(k)
+Geração de Dados
+
+Códigos gerados: Inteiros aleatórios de 9 dígitos (intervalo: 100.000.000 a 999.999.999)
+Seeds fixas: Garantem reprodutibilidade e que todas as três implementações processem exatamente os mesmos dados
+Distribuição: Uniforme dentro do intervalo especificado
 
 
-Executar o programa:
+📊 Resultados Obtidos
+Exemplo de Métricas Coletadas
+TamanhoMétodoInserção (ms)ColisõesBusca (ms)Gaps/Maiores Listas150.000Linear6100.00961/16/1150.000Duplo964.63941/11/1150.000Encadeamento1027.08396/6/6
 
-java hash.Main
+Nota: Resultados completos disponíveis em metricas.csv
+
+Visualização dos Dados
+Os dados exportados podem ser analisados graficamente utilizando:
+
+Microsoft Excel ou LibreOffice Calc
+Google Sheets
+Python (pandas + matplotlib/seaborn)
+R (ggplot2)
 
 
-O programa irá:
+🔍 Análise Comparativa
+Linear Probing
+Vantagens:
 
-Gerar três conjuntos de dados usando seed fixa (100.000, 1.000.000 e 10.000.000 registros).
+Excelente localidade de cache
+Rápido para fatores de carga baixos
 
-Inserir os registros em cada tabela hash (linear, duplo, encadeamento).
+Desvantagens:
 
-Medir tempo de inserção, busca, colisões, maiores listas e gaps.
+Clustering primário severo
+Degradação significativa de desempenho com alta ocupação
+Maior número absoluto de colisões
 
-Exportar métricas para metricas.csv para análise gráfica.
+Double Hashing
+Vantagens:
 
-Escolhas do Projeto
+Melhor distribuição dos elementos
+Redução dramática no número de colisões comparado ao linear
+Desempenho consistente mesmo com fatores de carga elevados
 
-Tamanhos dos Vetores Hash:
+Desvantagens:
 
-150.000, 1.500.000 e 15.000.000.
+Ligeiramente mais complexo computacionalmente
+Requer cálculo de hash secundário
 
-Cada tamanho cresce aproximadamente 10x, seguindo as orientações do trabalho.
+Chaining
+Vantagens:
 
-Funções Hash:
+Desempenho previsível e estável
+Não sofre com clustering
+Listas encadeadas geralmente curtas com boa função hash
 
-Linear Probing: hash = codigo % tamanho com rehashing linear.
+Desvantagens:
 
-Double Hashing: hash1 = codigo % tamanho, hash2 = 1 + (codigo / tamanho) % (tamanho - 1).
+Overhead de ponteiros e alocação dinâmica
+Menor aproveitamento de cache
+Tempo de inserção pode ser maior em grandes volumes
 
-Encadeamento: hash = codigo % tamanho.
 
-Geração dos Dados:
+🎯 Conclusões
+Com base nos experimentos realizados, Double Hashing apresentou o melhor equilíbrio entre:
 
-Foram usados números aleatórios de 9 dígitos (100000000 a 999999999).
+Tempo de inserção
+Tempo de busca
+Número de colisões
+Escalabilidade
 
-Seeds fixas garantem que os três métodos recebam exatamente os mesmos registros.
+É particularmente eficaz em cenários com fatores de carga médios a altos, onde as limitações do Linear Probing se tornam evidentes.
+O Encadeamento permanece uma escolha sólida quando a previsibilidade de desempenho é crítica e o overhead de memória é aceitável.
 
-Resultados
-Exemplo de saída (resumida):
-Tamanho Vetor	Método	Inserção (ms)	Colisões	Busca (ms)	Gaps / Maiores Listas
-150.000	Linear	6	100009	6	1/16/1
-150.000	Duplo	9	64639	4	1/11/1
-150.000	Encadeamento	10	27083	9	6/6/6
+📝 Observações Importantes
 
-Os resultados completos estão no arquivo metricas.csv e podem ser visualizados em gráficos para comparação de desempenho.
+✅ Código extensively comentado para facilitar compreensão e validação
+✅ Versão sem comentários incluída em pasta separada (prova de autoria)
+✅ Seeds fixas garantem reprodutibilidade dos experimentos
+✅ Todas as métricas exportadas para análise posterior
+✅ Interface comum permite fácil extensão para novos métodos
 
-Análise e Conclusão
-
-Linear Probing: rápido em vetores pequenos, mas colisões aumentam muito com vetores maiores.
-
-Double Hashing: melhor desempenho geral, colisões significativamente menores que linear.
-
-Encadeamento: mais estável em termos de colisões, porém maior tempo de inserção para grandes vetores.
-
-Gaps e maiores listas: Linear e Duplo têm gaps pequenos; Encadeamento mantém listas encadeadas curtas.
-
-Conclusão: Double Hashing apresentou o melhor equilíbrio entre tempo de inserção, busca e número de colisões, especialmente em vetores grandes.
-
-Observações!!!
-
-O código está comentado detalhadamente para facilitar a compreensão e validação do trabalho.
-
-Uma pasta separada com código sem comentários está incluída para prova de autoria.
-
-Métricas podem ser usadas para gerar gráficos em Excel, Google Sheets ou Python.
