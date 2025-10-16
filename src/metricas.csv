@@ -1,0 +1,10 @@
+Tabela,TamanhoVetor,TamanhoConjunto,TempoInsercao(ms),Colisoes,TempoBusca(ms),GapMenor,GapMaior,GapMedia,Lista1,Lista2,Lista3
+Linear,150000,100000,6,100009,6,1,16,1,,,
+Duplo,150000,100000,9,64639,4,1,11,1,,,
+Encadeamento,150000,100000,10,27083,9,,,,6,6,6
+Linear,1500000,1000000,27,997575,23,1,19,1,,,
+Duplo,1500000,1000000,25,649264,24,1,12,1,,,
+Encadeamento,1500000,1000000,105,270068,73,,,,8,8,7
+Linear,15000000,10000000,635,10231319,659,1,23,1,,,
+Duplo,15000000,10000000,427,6535216,414,1,17,1,,,
+Encadeamento,15000000,10000000,4358,2700700,923,,,,9,8,8
