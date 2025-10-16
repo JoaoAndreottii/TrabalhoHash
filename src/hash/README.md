@@ -1,5 +1,7 @@
 Tabela Hash em Java – Análise Comparativa de Desempenho
+
 📋 Descrição do Projeto
+
 Este projeto implementa e compara o desempenho de três estratégias de resolução de colisões em tabelas hash, desenvolvido como parte da avaliação da disciplina. As implementações incluem:
 
 Hash Linear (Linear Probing) – Resolução de colisões através de sondagem linear
